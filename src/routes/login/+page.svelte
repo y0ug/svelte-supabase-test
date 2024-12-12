@@ -6,8 +6,7 @@
   let { form, data } = $props<{ form: ActionData; data: PageData }>();
   let loading = $state(false);
 
-  let loginType = data.loginType;
-
+  let loginType = $derived(data.loginType);
   const handleSubmit: SubmitFunction = () => {
     loading = true;
     return async ({ update }) => {
@@ -121,6 +120,7 @@
 
           {#if loginType === LoginType.MagicLink}
             <a
+              data-sveltekit-reload
               href="?type=password"
               class="link link-primary mt-2 text-center"
             >
@@ -128,6 +128,7 @@
             </a>
           {:else}
             <a
+              data-sveltekit-reload
               href="?type=magic"
               class="link link-primary mt-2 text-center"
             >
