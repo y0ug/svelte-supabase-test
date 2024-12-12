@@ -3,6 +3,7 @@
   import type { ActionData, PageData, SubmitFunction } from "./$types.js";
   import { LoginType } from "$lib/types";
   import { toast } from "svoast";
+  import { derived } from "svelte/store";
   let { form, data } = $props<{ form: ActionData; data: PageData }>();
   let loading = $state(false);
 
@@ -69,7 +70,7 @@
         </div>
       {/if}
 
-      <form method="POST" use:enhance={handleSubmit} class="space-y-4">
+      <form method="POST" use:enhance={handleSubmit} action="?/login" class="space-y-4">
         <input type="hidden" name="loginType" value={loginType} />
 
         <!-- Email Field -->
@@ -120,17 +121,16 @@
 
           {#if loginType === LoginType.MagicLink}
             <a
-              data-sveltekit-reload
+              data-sveltekit-replacestate
               href="?type=password"
-              class="link link-primary mt-2 text-center"
+              class="btn btn-primary mt-2 text-center"
             >
               Login with password
             </a>
           {:else}
-            <a
-              data-sveltekit-reload
-              href="?type=magic"
-              class="link link-primary mt-2 text-center"
+            <a  data-sveltekit-replacestate
+              href="?type=magic" 
+              class="btn btn-secondary mt-2 text-center"
             >
               Login with magic link
             </a>
@@ -140,9 +140,14 @@
 
       <!-- Optional: Additional Links -->
       <div class="mt-4 text-center">
-        <a href="/forgot-password" class="link link-primary">Forgot Password?</a
-        >
-      </div>
+            <form method="POST" action="?/oauth"  >
+            <input type="hidden" name="provider" value="google">
+            <button type="submit" class="btn btn-secondary mt-2 text-center" >
+              Login with <i class="fa-brands fa-google"></i>
+            </button>
+            </form>
+        <a href="/forgot-password" class="btn btn-secondary mt-2 text-center">Forgot Password?</a>
+    </div>
     </div>
   </div>
-</div>
+  </div>
