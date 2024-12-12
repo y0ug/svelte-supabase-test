@@ -5,8 +5,16 @@
   import { toast } from "svoast";
   let { form, data } = $props<{ form: ActionData; data: PageData }>();
   let loading = $state(false);
-
-  let loginType = $derived(data.loginType);
+  
+  let loginType = $state(data.loginType);
+  
+  function toggleLoginType() {
+    loginType = loginType === LoginType.MagicLink ? LoginType.EmailPassword : LoginType.MagicLink;
+    const newType = loginType === LoginType.EmailPassword ? 'password' : 'magic';
+    const url = new URL(window.location.href);
+    url.searchParams.set('type', newType);
+    window.history.pushState({}, '', url);
+  }
   const handleSubmit: SubmitFunction = () => {
     loading = true;
     return async ({ update }) => {
@@ -118,23 +126,13 @@
             {/if}
           </button>
 
-          {#if loginType === LoginType.MagicLink}
-            <a
-              data-sveltekit-reload
-              href="?type=password"
-              class="link link-primary mt-2 text-center"
-            >
-              Login with password
-            </a>
-          {:else}
-            <a
-              data-sveltekit-reload
-              href="?type=magic"
-              class="link link-primary mt-2 text-center"
-            >
-              Login with magic link
-            </a>
-          {/if}
+          <button
+            type="button"
+            on:click={toggleLoginType}
+            class="link link-primary mt-2 text-center block w-full"
+          >
+            {loginType === LoginType.MagicLink ? 'Login with password' : 'Login with magic link'}
+          </button>
         </div>
       </form>
 
