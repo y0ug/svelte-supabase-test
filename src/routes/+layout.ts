@@ -31,5 +31,28 @@ export const load: LayoutLoad = async ({ fetch, data, depends }) => {
     data: { session },
   } = await supabase.auth.getSession()
 
-  return { supabase, session }
+  let profile = null;
+  if (session) {
+    const { data: p, error } = await supabase.from('profiles')
+      .select(`username, full_name, website, avatar_url`)
+      .eq('id', session?.user.id)
+      .single()
+
+    if (error) {
+      console.log("failed to fetch profile")
+    } else {
+      profile = p;
+    }
+  }
+  // if (profile && profile.avatar_url != null) {
+  //   const { data: signedUrl, error } = await supabase.storage
+  //     .from('avatars')
+  //     .createSignedUrl(profile?.avatar_url, 60);
+  //   if (!error) {
+  //     profile.avatar_url = signedUrl.signedUrl;
+  //   }
+  // }
+  //
+
+  return { supabase, profile, session }
 }
