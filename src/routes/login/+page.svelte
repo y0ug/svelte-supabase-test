@@ -1,12 +1,12 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
-  import type { ActionData, SubmitFunction } from "./$types.js";
+  import type { ActionData, PageData, SubmitFunction } from "./$types.js";
   import { LoginType } from "$lib/types";
   import { toast } from "svoast";
-  let { form } = $props();
+  let { form, data } = $props<{ form: ActionData; data: PageData }>();
   let loading = $state(false);
 
-  let loginType = LoginType.MagicLink;
+  let loginType = data.loginType;
 
   const handleSubmit: SubmitFunction = () => {
     loading = true;
@@ -121,10 +121,17 @@
 
           {#if loginType === LoginType.MagicLink}
             <a
-              href={`?loginType=${LoginType.EmailPassword}`}
+              href="?type=password"
               class="link link-primary mt-2 text-center"
             >
               Login with password
+            </a>
+          {:else}
+            <a
+              href="?type=magic"
+              class="link link-primary mt-2 text-center"
+            >
+              Login with magic link
             </a>
           {/if}
         </div>

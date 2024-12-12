@@ -10,7 +10,14 @@ export const load: PageServerLoad = async ({ url, params, locals: { safeGetSessi
     redirect(303, '/account')
   }
 
-  return { url: url.origin }
+  const loginType = url.searchParams.get('type') === 'password' 
+    ? LoginType.EmailPassword 
+    : LoginType.MagicLink;
+
+  return { 
+    url: url.origin,
+    loginType 
+  }
 }
 
 export const actions: Actions = {
