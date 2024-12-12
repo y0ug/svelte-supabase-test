@@ -7,13 +7,17 @@
   import { Toasts } from "svoast";
   let { data, children }: { data: LayoutData; children: Snippet } = $props();
 
-  let { supabase, session, profile } = data;
-  let user = session?.user;
+  let { supabase, session, profile, user } = $derived(data);
 
   onMount(() => {
     const { data } = supabase.auth.onAuthStateChange((event, newSession) => {
+      console.log(event);
       if (newSession?.expires_at !== session?.expires_at) {
         invalidate("supabase:auth");
+      }
+      if (event === "SIGNED_IN") {
+        invalidate("supabase:auth");
+        console.log("Signed in");
       }
       if (event == "PASSWORD_RECOVERY") {
         console.log("Password recovery ");

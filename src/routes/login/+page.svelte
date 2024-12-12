@@ -12,6 +12,7 @@
     loading = true;
     return async ({ update }) => {
       update();
+      toast.success("success fully login");
       loading = false;
     };
   };
@@ -70,7 +71,7 @@
         </div>
       {/if}
 
-      <form method="POST" use:enhance={handleSubmit} action="?/login" class="space-y-4">
+      <form method="POST" use:enhance action="?/login" class="space-y-4">
         <input type="hidden" name="loginType" value={loginType} />
 
         <!-- Email Field -->

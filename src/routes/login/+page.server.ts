@@ -51,7 +51,7 @@ export const actions: Actions = {
       }
 
       // Redirect to profile page upon successful login
-      throw redirect(303, '/profile');
+      throw redirect(303, '/account');
     } else if (loginType == LoginType.MagicLink) {
       console.log('Magic login');
       const { data, error } = await locals.supabase.auth.signInWithOtp({
@@ -93,7 +93,7 @@ export const actions: Actions = {
     })
 
     if (data.url) {
-      redirect(307, data.url) // use the redirect API for your server framework
+      redirect(302, data.url) // use the redirect API for your server framework
     }
   }
 

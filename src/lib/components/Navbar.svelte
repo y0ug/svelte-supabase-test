@@ -1,5 +1,34 @@
 <script lang="ts">
-  let { user, profile, supabase } = $props();
+  import { enhance } from "$app/forms";
+  import { invalidate } from "$app/navigation";
+  let { user, profile, supabase, form } = $props();
+
+  const avatar_url = $derived(profile.avatar_url);
+
+  // if (user) {
+  //   if (user.user_metadata?.avatar_url) {
+  //     avatar_url = user.user_metadata?.avatar_url;
+  //   } else {
+  //     avatar_url = $derived(profile.avatar_url);
+  //   }
+  // }
+
+  // const logout = ({ formElement, formData, action, cancel, submitter }) => {
+  //   // `formElement` is this `<form>` element
+  //   // `formData` is its `FormData` object that's about to be submitted
+  //   // `action` is the URL to which the form is posted
+  //   // calling `cancel()` will prevent the submission
+  //   // `submitter` is the `HTMLElement` that caused the form to be submitted
+  //
+  //   return async ({ result, update }) => {
+  //     console.log(result);
+  //     console.log(update);
+  //
+  //     invalidate("supabase:auth");
+  //     // `result` is an `ActionResult` object
+  //     // `update` is a function which triggers the default logic that would be triggered if this callback wasn't set
+  //   };
+  // };
 </script>
 
 <!-- Navbar -->
@@ -10,11 +39,11 @@
   <!-- Menu for desktop -->
   <ul class="hidden menu sm:menu-horizontal gap-2">
     {#if user}
-      {#if profile.avatar_url}
+      {#if avatar_url}
         <div class="avatar">
           <div class="w-8 rounded-full">
             <img
-              src={profile.avatar_url}
+              src={avatar_url}
               alt="{profile.full_name}'s Profile Picture"
               class="w-8 h-8 rounded-full object-cover"
               onerror={(e: Event) => {
@@ -40,7 +69,7 @@
       <a href="/account" class="btn btn-ghost">
         <span>{profile?.full_name}</span>
       </a>
-      <form action="/auth/logout" method="POST">
+      <form action="/auth/logout" method="POST" use:enhance>
         <button type="submit" class="btn btn-sm btn-ghost">Logout</button>
       </form>
     {:else}
