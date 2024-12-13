@@ -129,8 +129,9 @@
               Login with password
             </a>
           {:else}
-            <a  data-sveltekit-replacestate
-              href="?type=magic" 
+            <a
+              data-sveltekit-replacestate
+              href="?type=magic"
               class="btn btn-secondary mt-2 text-center"
             >
               Login with magic link
@@ -141,14 +142,22 @@
 
       <!-- Optional: Additional Links -->
       <div class="mt-4 text-center">
-            <form method="POST" action="?/oauth"  >
-            <input type="hidden" name="provider" value="google">
-            <button type="submit" class="btn btn-secondary mt-2 text-center" >
-              Login with <i class="fa-brands fa-google"></i>
-            </button>
-            </form>
-        <a href="/forgot-password" class="btn btn-secondary mt-2 text-center">Forgot Password?</a>
-    </div>
+        <form method="POST" action="?/oauth">
+          <input type="hidden" name="provider" value="google" />
+          <button type="submit" class="btn btn-secondary mt-2 text-center">
+            Login with <i class="fa-brands fa-google"></i>
+          </button>
+        </form>
+        <form method="POST" action="?/oauth">
+          <input type="hidden" name="provider" value="github" />
+          <button type="submit" class="btn btn-secondary mt-2 text-center">
+            Login with <i class="fa-brands fa-github"></i>
+          </button>
+        </form>
+        <a href="/forgot-password" class="btn btn-secondary mt-2 text-center"
+          >Forgot Password?</a
+        >
+      </div>
     </div>
   </div>
-  </div>
+</div>

@@ -37,7 +37,7 @@ export const load: LayoutLoad = async ({ fetch, data, depends }) => {
     if (error) {
       console.log("failed to fetch user")
     } else {
-      user = u;
+      user = u.user;
     }
   }
   let profile = null;

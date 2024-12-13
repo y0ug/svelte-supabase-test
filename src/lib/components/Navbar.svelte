@@ -1,45 +1,22 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
-  import { invalidate } from "$app/navigation";
-  let { user, profile, supabase, form } = $props();
+  let { user, profile } = $props();
 
-  const avatar_url = $derived(profile.avatar_url);
-
-  // if (user) {
-  //   if (user.user_metadata?.avatar_url) {
-  //     avatar_url = user.user_metadata?.avatar_url;
-  //   } else {
-  //     avatar_url = $derived(profile.avatar_url);
-  //   }
-  // }
-
-  // const logout = ({ formElement, formData, action, cancel, submitter }) => {
-  //   // `formElement` is this `<form>` element
-  //   // `formData` is its `FormData` object that's about to be submitted
-  //   // `action` is the URL to which the form is posted
-  //   // calling `cancel()` will prevent the submission
-  //   // `submitter` is the `HTMLElement` that caused the form to be submitted
-  //
-  //   return async ({ result, update }) => {
-  //     console.log(result);
-  //     console.log(update);
-  //
-  //     invalidate("supabase:auth");
-  //     // `result` is an `ActionResult` object
-  //     // `update` is a function which triggers the default logic that would be triggered if this callback wasn't set
-  //   };
-  // };
+  console.log(user);
+  const avatar_url = $derived(
+    profile.avatar_url || user.user_metadata?.avatar_url,
+  );
 </script>
 
 <!-- Navbar -->
 <nav class="navbar justify-between bg-base-300">
   <!-- Logo -->
-  <a class="btn btn-ghost text-lg"> Company </a>
+  <a href="/" class="btn btn-ghost text-lg"> Company </a>
 
   <!-- Menu for desktop -->
   <ul class="hidden menu sm:menu-horizontal gap-2">
     {#if user}
-      {#if avatar_url}
+      {#if avatar_url && avatar_url !== ""}
         <div class="avatar">
           <div class="w-8 rounded-full">
             <img
