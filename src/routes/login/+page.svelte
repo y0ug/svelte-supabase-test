@@ -3,22 +3,28 @@
   import type { ActionData, PageData, SubmitFunction } from "./$types.js";
   import { LoginType } from "$lib/types";
   import { toast } from "svoast";
+  import { derived } from "svelte/store";
   let { form, data } = $props<{ form: ActionData; data: PageData }>();
   let loading = $state(false);
-  
+
   let loginType = $state(data.loginType);
-  
+
   function toggleLoginType() {
-    loginType = loginType === LoginType.MagicLink ? LoginType.EmailPassword : LoginType.MagicLink;
-    const newType = loginType === LoginType.EmailPassword ? 'password' : 'magic';
+    loginType =
+      loginType === LoginType.MagicLink
+        ? LoginType.EmailPassword
+        : LoginType.MagicLink;
+    const newType =
+      loginType === LoginType.EmailPassword ? "password" : "magic";
     const url = new URL(window.location.href);
-    url.searchParams.set('type', newType);
-    window.history.pushState({}, '', url);
+    url.searchParams.set("type", newType);
+    window.history.pushState({}, "", url);
   }
   const handleSubmit: SubmitFunction = () => {
     loading = true;
     return async ({ update }) => {
       update();
+      toast.success("success fully login");
       loading = false;
     };
   };
@@ -77,7 +83,7 @@
         </div>
       {/if}
 
-      <form method="POST" use:enhance={handleSubmit} class="space-y-4">
+      <form method="POST" use:enhance action="?/login" class="space-y-4">
         <input type="hidden" name="loginType" value={loginType} />
 
         <!-- Email Field -->
@@ -126,19 +132,42 @@
             {/if}
           </button>
 
-          <button
-            type="button"
-            on:click={toggleLoginType}
-            class="link link-primary mt-2 text-center block w-full"
-          >
-            {loginType === LoginType.MagicLink ? 'Login with password' : 'Login with magic link'}
-          </button>
+          {#if loginType === LoginType.MagicLink}
+            <a
+              data-sveltekit-replacestate
+              href="?type=password"
+              class="btn btn-primary mt-2 text-center"
+            >
+              Login with password
+            </a>
+          {:else}
+            <a
+              data-sveltekit-replacestate
+              href="?type=magic"
+              class="btn btn-secondary mt-2 text-center"
+            >
+              Login with magic link
+            </a>
+          {/if}
         </div>
       </form>
 
       <!-- Optional: Additional Links -->
       <div class="mt-4 text-center">
-        <a href="/forgot-password" class="link link-primary">Forgot Password?</a
+        <form method="POST" action="?/oauth">
+          <input type="hidden" name="provider" value="google" />
+          <button type="submit" class="btn btn-secondary mt-2 text-center">
+            Login with <i class="fa-brands fa-google"></i>
+          </button>
+        </form>
+        <form method="POST" action="?/oauth">
+          <input type="hidden" name="provider" value="github" />
+          <button type="submit" class="btn btn-secondary mt-2 text-center">
+            Login with <i class="fa-brands fa-github"></i>
+          </button>
+        </form>
+        <a href="/forgot-password" class="btn btn-secondary mt-2 text-center"
+          >Forgot Password?</a
         >
       </div>
     </div>

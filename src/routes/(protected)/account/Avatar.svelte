@@ -1,9 +1,8 @@
 <script lang="ts">
   import type { SupabaseClient, User } from "@supabase/supabase-js";
 
-  let { size = 10, url = $bindable(), supabase, user, upload } = $props();
+  let { size = 10, avatarUrl = $bindable(), supabase, user, upload } = $props();
 
-  let avatarUrl: string | null = $state(null);
   let uploading = $state(false);
   let files: FileList;
 
@@ -48,7 +47,6 @@
       }
 
       const { data } = supabase.storage.from("avatars").getPublicUrl(filePath);
-      console.log(data.publicUrl);
       avatarUrl = data.publicUrl;
 
       setTimeout(() => {

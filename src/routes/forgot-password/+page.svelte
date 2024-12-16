@@ -17,25 +17,27 @@
   };
 </script>
 
-<div
-  class="flex flex-col gap-6 rounded-box bg-base-200 p-6 max-w-md text-center"
->
-  <h1 class="text-2xl font-bold">Forgot password?</h1>
+<div class="flex items-center justify-center min-h-screen">
+  <div
+    class="flex flex-col gap-6 rounded-box bg-base-200 p-6 max-w-md text-center"
+  >
+    <h1 class="text-2xl font-bold">Forgot password?</h1>
 
-  <form method="POST" onsubmit={reset}>
-    <span>
-      Remember your password?
-      <a href="/login" class="link link-secondary">Log in here</a>
-    </span>
+    <form method="POST" onsubmit={reset}>
+      <span>
+        Remember your password?
+        <a href="/login" class="link link-secondary">Log in here</a>
+      </span>
 
-    <label class="form-control">
-      <div class="label">
-        <span class="label-text">Email</span>
-      </div>
+      <label class="form-control">
+        <div class="label">
+          <span class="label-text">Email</span>
+        </div>
 
-      <input type="email" name="email" class="input input-bordered" />
-    </label>
+        <input type="email" name="email" class="input input-bordered" />
+      </label>
 
-    <button type="submit" class="btn btn-primary">Reset password</button>
-  </form>
+      <button type="submit" class="btn btn-primary">Reset password</button>
+    </form>
+  </div>
 </div>

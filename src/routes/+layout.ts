@@ -31,6 +31,15 @@ export const load: LayoutLoad = async ({ fetch, data, depends }) => {
     data: { session },
   } = await supabase.auth.getSession()
 
+  let user = null;
+  if (session) {
+    const { data: u, error } = await supabase.auth.getUser();
+    if (error) {
+      console.log("failed to fetch user")
+    } else {
+      user = u.user;
+    }
+  }
   let profile = null;
   if (session) {
     const { data: p, error } = await supabase.from('profiles')
@@ -54,5 +63,5 @@ export const load: LayoutLoad = async ({ fetch, data, depends }) => {
   // }
   //
 
-  return { supabase, profile, session }
+  return { supabase, user, profile, session }
 }

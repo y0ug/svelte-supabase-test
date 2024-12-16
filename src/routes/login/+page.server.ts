@@ -10,18 +10,18 @@ export const load: PageServerLoad = async ({ url, params, locals: { safeGetSessi
     redirect(303, '/account')
   }
 
-  const loginType = url.searchParams.get('type') === 'password' 
-    ? LoginType.EmailPassword 
+  const loginType = url.searchParams.get('type') === 'password'
+    ? LoginType.EmailPassword
     : LoginType.MagicLink;
 
-  return { 
+  return {
     url: url.origin,
-    loginType 
+    loginType
   }
 }
 
 export const actions: Actions = {
-  default: async ({ request, cookies, locals }) => {
+  login: async ({ request, cookies, locals }) => {
     const formData = await request.formData();
     const loginTypeParam = formData.get('loginType') as string;
     const email = formData.get('email') as string;
@@ -51,7 +51,7 @@ export const actions: Actions = {
       }
 
       // Redirect to profile page upon successful login
-      throw redirect(303, '/profile');
+      throw redirect(303, '/account');
     } else if (loginType == LoginType.MagicLink) {
       console.log('Magic login');
       const { data, error } = await locals.supabase.auth.signInWithOtp({
@@ -74,7 +74,27 @@ export const actions: Actions = {
         message: 'Please check your email for a magic link to log into the website.',
       }
     }
-
-
   },
+
+  oauth: async ({ request, cookies, locals }) => {
+    const formData = await request.formData();
+    const provider = formData.get("provider") || "";
+    if (!provider) {
+      return fail(400, {
+        success: false,
+        message: `No provider set.`,
+      })
+    }
+
+    const { data, error } = await locals.supabase.auth.signInWithOAuth({
+      provider: provider, options: {
+        redirectTo: `http://127.0.0.1:5174/auth/callback`,
+      }
+    })
+
+    if (data.url) {
+      redirect(302, data.url) // use the redirect API for your server framework
+    }
+  }
+
 };
