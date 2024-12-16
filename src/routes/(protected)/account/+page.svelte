@@ -1,6 +1,6 @@
 <!-- src/routes/account/+page.svelte -->
 <script lang="ts">
-  import { enhance } from "$app/forms";
+  import { applyAction, enhance } from "$app/forms";
   import type { SubmitFunction } from "@sveltejs/kit";
   import Avatar from "./Avatar.svelte";
   import { invalidate } from "$app/navigation";
@@ -18,8 +18,8 @@
 
   const handleSubmit: SubmitFunction = () => {
     loading = true;
-    return async () => {
-      invalidate("supabase:auth");
+    return async ({ result }) => {
+      await applyAction(result);
       loading = false;
     };
   };

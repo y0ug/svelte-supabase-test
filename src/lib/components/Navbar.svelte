@@ -2,7 +2,7 @@
   import { enhance } from "$app/forms";
   let { user, profile } = $props();
 
-  console.log(user);
+  const name = $derived(user.user_metadata?.full_name || user.email);
   const avatar_url = $derived(
     profile.avatar_url || user.user_metadata?.avatar_url,
   );
@@ -37,14 +37,14 @@
           <div
             class="bg-neutral text-neutral-content w-12 h-12 rounded-full flex items-center justify-center text-xl"
           >
-            {#if profile.full_name}
+            {#if name}
               {profile.full_name.charAt(0).toUpperCase()}
             {/if}
           </div>
         </div>
       {/if}
       <a href="/account" class="btn btn-ghost">
-        <span>{profile?.full_name}</span>
+        <span>{name}</span>
       </a>
       <form action="/auth/logout" method="POST" use:enhance>
         <button type="submit" class="btn btn-sm btn-ghost">Logout</button>
